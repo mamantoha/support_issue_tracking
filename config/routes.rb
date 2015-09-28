@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   resources :tickets do
+    member do
+      post :assign_to_me
+    end
     resources :comments, only: [:create, :new]
   end
 
@@ -7,11 +10,15 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  resources :users, only: [:index, :new]
+  resources :users, only: [:index, :new, :edit, :update]
 
   resources :users do
     collection do
       post 'new', to: :create
+    end
+
+    member do
+      put 'restore'
     end
   end
 

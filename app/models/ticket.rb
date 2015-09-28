@@ -9,16 +9,24 @@ class Ticket < ActiveRecord::Base
 
   after_create :generate_display_id
 
-  has_many :comments
+  has_many :comments, dependent: :destroy
+  belongs_to :assignee, -> { unscope(where: :deleted_at) }, class_name: 'User', foreign_key: 'assignee_id'
+
 
   validates :name, presence: true
   validates :email, presence: true, email: true
   validates :subject, presence: true
   validates :body, presence: true
 
+  scope :assigned_to, ->(assignee_id) { where(assignee_id: assignee_id) }
+  scope :unassigned, -> { where(assignee_id: nil, status: %w(new)) }
+  scope :opened, -> { where(status: %w(new waited_for_customer on_hold)) }
+  scope :on_holded, -> { where(status: %w(on_hold)) }
+  scope :completed, -> { where(status: %w(completed canceled)) }
+
   aasm column: 'status' do
-    state :new, initial: true
-    state :waited_for_curtomer
+    state :new, initial: true # Waiting for Staff Response
+    state :waited_for_customer
     state :on_hold
     state :canceled
     state :completed

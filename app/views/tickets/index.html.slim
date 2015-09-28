@@ -1,33 +1,28 @@
-h3 Tickets Search
-= form_for tickets_path, method: :get do |f|
-  p
-    = f.label "Search for:"
-    = text_field_tag :q, params[:q]
-    = submit_tag "Go", name: nil, class: 'button'
+/* ul class='tabs vertical' data-tab='' */
+ul class='tabs'
+  li class="tab-title #{'active' if params[:status] == 'unassigned' || params[:status].nil?}"
+    = link_to 'New unassigned tickets', status: 'unassigned'
+  li class="tab-title #{'active' if params[:status] == 'opened'}"
+    = link_to 'Open Tickets', status: 'opened'
+  li class="tab-title #{'active' if params[:status] == 'on_holded'}"
+    = link_to 'On hold tickets', status: 'on_holded'
+  li class="tab-title #{'active' if params[:status] == 'closed'}"
+    = link_to 'Closed Tickets', status: 'closed'
 
-h2 Listing tickets
-table
-  thead
-    tr
-      th Email
-      th Name
-      th Subject
-      th Body
-      th
-      th
-      th
+div class='tabs-content'
+  div class='content #{'active' if params[:status] == 'unassigned' || params[:status].nil?}'
+    h1 New unassigned tickets
+    == render 'list'
+  div class='content #{'active' if params[:status] == 'opened'}'
+    h1 Open tickets
+    == render 'list'
+  div class='content #{'active' if params[:status] == 'on_holded'}'
+    h1 On hold tickets
+    == render 'list'
+  div class='content #{'active' if params[:status] == 'closed'}'
+    h1 Closed tickets
+    == render 'list'
 
-  tbody
-    - @tickets.each do |ticket|
-      tr
-        td = ticket.email
-        td = ticket.name
-        td = ticket.subject
-        td = ticket.body
-        td = link_to 'Show', ticket
-        td = link_to 'Edit', edit_ticket_path(ticket)
-        td = link_to 'Destroy', ticket, data: {:confirm => 'Are you sure?'}, :method => :delete
+hr
 
-br
-
-= link_to 'New Ticket', new_ticket_path
+= button_to 'New Ticket', new_ticket_path, class: 'button', method: :get

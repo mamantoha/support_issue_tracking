@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150925120753) do
+ActiveRecord::Schema.define(version: 20150928083839) do
 
   create_table "comments", force: :cascade do |t|
     t.string   "body"
@@ -37,16 +37,8 @@ ActiveRecord::Schema.define(version: 20150925120753) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
 
-  create_table "tickets", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "subject"
-    t.text     "body"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "status"
-    t.string   "display_id"
-  end
+# Could not dump table "tickets" because of following NoMethodError
+#   undefined method `[]' for nil:NilClass
 
   create_table "users", force: :cascade do |t|
     t.string   "username",               default: "", null: false
@@ -63,8 +55,10 @@ ActiveRecord::Schema.define(version: 20150925120753) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.integer  "role"
+    t.string   "deleted_at"
   end
 
+  add_index "users", ["deleted_at"], name: "index_users_on_deleted_at"
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   add_index "users", ["username"], name: "index_users_on_username", unique: true

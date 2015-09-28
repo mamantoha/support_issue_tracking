@@ -6,15 +6,23 @@ table
       th Name
       th Email
       th Role
-
+      th Status
+      th
+      th
+      th
   tbody
     - @users.each do |user|
       tr
         td = user.username
         td = user.email
         td = user.role
+        td = user.deleted? ? 'Suspended' : 'Active'
+        - if policy(user).edit?
+          td = link_to 'Edit', edit_user_path(user)
         - if policy(user).destroy?
-          td = link_to 'Destroy', user, data: {:confirm => 'Are you sure?'}, :method => :delete
+          td = link_to 'Suspend', user, data: {:confirm => 'Are you sure?'}, :method => :delete
+        - if policy(user).restore?
+          td = link_to 'Restore', restore_user_path(user), :method => :put
 
 br
 

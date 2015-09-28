@@ -7,19 +7,27 @@ class UserPolicy
   end
 
   def index?
-    user.admin?
+    user && user.admin?
+  end
+
+  def edit?
+    user && user.admin? && !model.admin? && !model.deleted?
   end
 
   def destroy?
-    user.admin?
+    user && user.admin? && !model.admin? && !model.deleted?
+  end
+
+  def restore?
+    user && user.admin? && !model.admin? && model.deleted?
   end
 
   def new?
-    user.admin?
+    user && user.admin?
   end
 
   def create?
-    user.admin?
+    user && user.admin?
   end
 
 end

@@ -1,0 +1,6 @@
+Welcome to example.com, <%= @ticket.name%>
+
+Your request has been received.
+To view your ticket, just follow this link: <%= link_to @ticket.display_id, ticket_url(@ticket) %>
+
+Thanks for your request and have a great day!

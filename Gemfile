@@ -39,6 +39,7 @@ gem 'simple_form'
 gem 'aasm'
 gem 'friendly_id', '~> 5.0.0'
 gem 'email_validator'
+gem 'paranoia', '~> 2.0'
 
 gem 'will_paginate'
 gem 'will_paginate-foundation'
@@ -49,6 +50,7 @@ gem 'elasticsearch-rails'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -60,5 +62,6 @@ group :development do
 
   gem 'better_errors'
   gem 'rails_layout'
+  gem 'letter_opener'
 end
 

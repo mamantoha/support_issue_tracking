@@ -1,0 +1,33 @@
+= form_for tickets_path, method: :get do |f|
+  p
+    = f.label "Search for:"
+    = text_field_tag :q, params[:q]
+    = hidden_field_tag :status, params[:status]
+    = submit_tag "Go", name: nil, class: 'button'
+
+h2 Listing tickets
+table
+  thead
+    tr
+      th Email
+      th Name
+      th Subject
+      th Body
+      th
+      th
+      th
+
+  tbody
+    - @tickets.each do |ticket|
+      tr
+        td = ticket.email
+        td = ticket.name
+        td = ticket.subject
+        td = ticket.body
+        td = link_to 'Show', ticket
+        - if policy(ticket).edit?
+          td = link_to 'Edit', edit_ticket_path(ticket)
+        - if policy(ticket).destroy?
+          td = link_to 'Destroy', ticket, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+= will_paginate @tickets, renderer: FoundationPagination::Rails
