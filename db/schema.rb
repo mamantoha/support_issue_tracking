@@ -37,8 +37,20 @@ ActiveRecord::Schema.define(version: 20150928083839) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
 
-# Could not dump table "tickets" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
+  create_table "tickets", force: :cascade do |t|
+    t.string   "name",                   default: "", null: false
+    t.string   "subject",                default: "", null: false
+    t.text     "body",                   default: "", null: false
+    t.string   "email",                  default: "", null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.string   "status"
+    t.string   "display_id",  limit: 17
+    t.integer  "assignee_id"
+  end
+
+  add_index "tickets", ["display_id"], name: "index_tickets_on_display_id", unique: true
+  add_index "tickets", ["status"], name: "index_tickets_on_status"
 
   create_table "users", force: :cascade do |t|
     t.string   "username",               default: "", null: false
