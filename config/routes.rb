@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
-      post 'new', to: :create
+      post 'new', action: :create
     end
 
     member do

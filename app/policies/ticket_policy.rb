@@ -18,6 +18,10 @@ class TicketPolicy
     user && user.admin?
   end
 
+  def create?
+    true
+  end
+
   def assign_to_me?
     user
   end

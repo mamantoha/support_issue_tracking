@@ -52,6 +52,7 @@ class TicketsController < ApplicationController
   # POST /tickets.json
   def create
     @ticket = Ticket.new(ticket_params)
+    authorize(@ticket)
 
     respond_to do |format|
       if @ticket.save
