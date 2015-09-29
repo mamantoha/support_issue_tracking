@@ -1,0 +1,12 @@
+p#notice = notice
+
+h3 Department
+
+p
+  | Name: #{@department.name}
+p
+  | Description: #{@department.description}
+
+= link_to 'Edit', edit_department_path(@department)
+'|
+= link_to 'Back', departments_path

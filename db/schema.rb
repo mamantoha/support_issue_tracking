@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928083839) do
+ActiveRecord::Schema.define(version: 20150929090239) do
 
   create_table "comments", force: :cascade do |t|
     t.string   "body"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 20150928083839) do
 
   add_index "comments", ["ticket_id"], name: "index_comments_on_ticket_id"
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+
+  create_table "departments", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -38,17 +45,19 @@ ActiveRecord::Schema.define(version: 20150928083839) do
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
 
   create_table "tickets", force: :cascade do |t|
-    t.string   "name",                   default: "", null: false
-    t.string   "subject",                default: "", null: false
-    t.text     "body",                   default: "", null: false
-    t.string   "email",                  default: "", null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.string   "name",                     default: "", null: false
+    t.string   "subject",                  default: "", null: false
+    t.text     "body",                     default: "", null: false
+    t.string   "email",                    default: "", null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.string   "status"
-    t.string   "display_id",  limit: 17
+    t.string   "display_id",    limit: 17
     t.integer  "assignee_id"
+    t.integer  "department_id"
   end
 
+  add_index "tickets", ["department_id"], name: "index_tickets_on_department_id"
   add_index "tickets", ["display_id"], name: "index_tickets_on_display_id", unique: true
   add_index "tickets", ["status"], name: "index_tickets_on_status"
 

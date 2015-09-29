@@ -28,6 +28,9 @@ p
   - else
     | Not assigned
 
+p
+  | Department: #{@ticket.department.try(:name)}
+
 div.panel
   = @ticket.body
 

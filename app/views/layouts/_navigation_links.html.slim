@@ -10,6 +10,10 @@
   li
     = link_to 'Tickets', tickets_path
 
+- if policy(:department).index?
+  li
+    = link_to 'Departments', departments_path
+
 - if policy(:user).index?
   li
     = link_to 'Users', users_path

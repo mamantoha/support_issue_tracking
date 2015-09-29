@@ -3,9 +3,11 @@ require 'rails_helper'
 describe TicketsController do
 
   describe 'POST /tickets' do
+    let (:department) { FactoryGirl.create :department }
+
     describe 'as guest user' do
       it 'should allow me to create a ticket' do
-        post :create, ticket: { name: 'Name', subject: 'Ticket', body: 'Body', email: 'user@example.com' }
+        post :create, ticket: { name: 'Name', subject: 'Ticket', body: 'Body', email: 'user@example.com', department_id: department.id }
 
         expect(response).to redirect_to(assigns(:ticket))
       end

@@ -10,6 +10,7 @@ class Ticket < ActiveRecord::Base
   after_create :generate_display_id
 
   has_many :comments, dependent: :destroy
+  belongs_to :department, required: true
   belongs_to :assignee, -> { unscope(where: :deleted_at) }, class_name: 'User', foreign_key: 'assignee_id'
 
 
