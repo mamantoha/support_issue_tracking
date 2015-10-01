@@ -7,12 +7,9 @@ class Ticket < ActiveRecord::Base
 
   friendly_id :display_id
 
-  after_create :generate_display_id
-
   has_many :comments, dependent: :destroy
   belongs_to :department, required: true
   belongs_to :assignee, -> { unscope(where: :deleted_at) }, class_name: 'User', foreign_key: 'assignee_id'
-
 
   validates :name, presence: true
   validates :email, presence: true, email: true
@@ -34,12 +31,29 @@ class Ticket < ActiveRecord::Base
   end
 
   after_create do |ticket|
-    ticket.update_attributes(display_id: generate_display_id)
+    retry_count = 0
+
+    begin
+      ticket.update_attributes(display_id: Ticket.generate_display_id)
+    rescue ActiveRecord::RecordNotUnique => e
+      msg = "Unique display_id creation '#{ticket.display_id}' failed due to unique key constraint"
+      retry_count += 1
+      ticket.display_id = nil
+
+      if retry_count <= 5
+        logger.warn "#{msg}: retry attempt #{retry_count}."
+        retry
+      else
+        logger.error "#{msg}: max retry attempts exceeded."
+        raise e
+      end
+    end
+
   end
 
-  protected
+  # protected
 
-  def generate_display_id
+  def self.generate_display_id
     # "ABC-4F-ABC-8D-ABC"
     "#{Array.new(3) { [*"A".."Z", *"0".."9"].sample }.join}-#{SecureRandom.hex(1).upcase}-#{Array.new(3) { [*"A".."Z", *"0".."9"].sample }.join}-#{SecureRandom.hex(1).upcase}-#{Array.new(3) { [*"A".."Z", *"0".."9"].sample }.join}"
   end
